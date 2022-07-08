@@ -77,29 +77,27 @@ func getUsers() []User {
 	return users
 }
 
+func getUserName(u User) string {
+	return u.Name
+}
+
 func main() {
 	env := map[string]interface{}{
 		"foo":      1,
 		"double":   func(i int) int { return i * 2 },
 		"users":    getUsers(),
 		"getUsers": getUsers,
+		"getName":  getUserName,
 	}
 
-	out, err := expr.Eval("double(foo)", env)
-	if err != nil {
-		panic(err)
-	}
+	out, _ := expr.Eval("double(foo)", env)
 	fmt.Println(out)
-	out, err = expr.Eval("users[1]", env)
-	if err != nil {
-		panic(err)
-	}
+	out, _ = expr.Eval("users[1]", env)
 	fmt.Println(out)
-	out, err = expr.Eval("users[0].Name", env)
-	if err != nil {
-		panic(err)
-	}
+	out, _ = expr.Eval("users[0].Name", env)
 	fmt.Println(out)
-	out, err = expr.Eval("getUsers()[0].Email", env)
+	out, _ = expr.Eval("getUsers()[0].Email", env)
+	fmt.Println(out)
+	out, _ = expr.Eval("getName(users[2])", env)
 	fmt.Println(out)
 }
