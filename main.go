@@ -1,0 +1,105 @@
+package main
+
+import (
+	"fmt"
+	"github.com/antonmedv/expr"
+)
+
+type User struct {
+	Login        string
+	Name         string
+	Email        string
+	privateNotes string
+}
+
+func getUsers() []User {
+
+	users := []User{{
+		Login:        "katelynndel",
+		Name:         "Tirzah Menges",
+		Email:        "elicia_lewteree1@alternative.fbu",
+		privateNotes: "Township ping marvel chassis date sorry screensaver, paintings nelson letting lip employ enemy tasks, continues viewing shapes warranty. ",
+	},
+		{
+			Login:        "shellycjpk",
+			Name:         "Aryana Renn",
+			Email:        "crosby_swiftb@casting.gd",
+			privateNotes: "Controversy educational workshop website waters habitat decline, nightmare argue departure eye shapes humidity chelsea, settled dig. ",
+		},
+		{
+			Login:        "johanna2l",
+			Name:         "Kyleigh Manes",
+			Email:        "cheree_lyke5b@buried.roy",
+			privateNotes: "Headquarters federation review soup invitations latvia profits, unsubscribe assuming gang shakira remainder theme safety, madison utility file nursing executives boston receiver. ",
+		},
+		{
+			Login:        "tracyannho3l",
+			Name:         "Turrell Stamper",
+			Email:        "melynda_handlerxp@kissing.ndc",
+			privateNotes: "Organizing ringtone heading plugins disney rat vote, missile keywords design temperature kathy cologne oil, states dimensions proved mauritius utilization programmers dos, hat clinical. ",
+		},
+		{
+			Login:        "johntaemna",
+			Name:         "Hawley Seibel",
+			Email:        "bradley_duguayxg1@mad.pz",
+			privateNotes: "Natural smoking jan exposure melbourne namibia need, attend lowest fuel dirty saturday outputs track, uses. ",
+		},
+		{
+			Login:        "jacipw0s",
+			Name:         "Shad Chery",
+			Email:        "callum_eskridgedaz@learn.tix",
+			privateNotes: "Hockey cooked heaven last rom understand contacts, postcards oz capabilities scenario auditor tube blame, used catch tune wanna. ",
+		},
+		{
+			Login:        "jonahtanri",
+			Name:         "Ligia Jerome",
+			Email:        "trish_mccaint0s@case.wzq",
+			privateNotes: "Smaller skirts liberal sullivan authorities district busy, accessories bikes meta connecticut potentially double particularly, evening repository championships uploaded integrated url mills, concord. ",
+		},
+		{
+			Login:        "marlissal20w",
+			Name:         "Quandra Mcreynolds",
+			Email:        "elya_bakospd@explaining.fp",
+			privateNotes: "Table integer crystal cute drug decades denied, locations counties reached defeat guild christ battle, abortion raising startup racks arms ice specifications, lens pre voice inquiries applicants gregory this. ",
+		},
+		{
+			Login:        "remus4",
+			Name:         "Johnda Rainbolt",
+			Email:        "melita_polly7a@photographic.efo",
+			privateNotes: "Id roles lexus weddings essentially joshua charlie, scientist determines copies pay forest supplemental egypt, returned loved overview copyright. ",
+		},
+		{
+			Login:        "keneshiajxz",
+			Name:         "Catrell Waddy",
+			Email:        "yaa_virginak@humidity.be",
+			privateNotes: "Fire purposes shipment promoting does epic consulting, shelf returning self davis northeast rehabilitation notebooks, circulation mars. ",
+		}}
+	return users
+}
+
+func main() {
+	env := map[string]interface{}{
+		"foo":      1,
+		"double":   func(i int) int { return i * 2 },
+		"users":    getUsers(),
+		"getUsers": getUsers,
+	}
+
+	out, err := expr.Eval("double(foo)", env)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(out)
+	out, err = expr.Eval("users[1]", env)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(out)
+	out, err = expr.Eval("users[0].Name", env)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(out)
+	out, err = expr.Eval("getUsers()[0].Email", env)
+	fmt.Println(out)
+}
