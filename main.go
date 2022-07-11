@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/antonmedv/expr"
+	"strconv"
+	"strings"
 )
 
 type User struct {
@@ -81,6 +83,57 @@ func getUserName(u User) string {
 	return u.Name
 }
 
+func sumSlice(items []any) any {
+	if len(items) == 0 {
+		return 0
+	}
+	var ints int64
+	var floats float64
+	var hadFloats bool = false
+	for _, item := range items {
+		switch x := item.(type) {
+		case int:
+			ints += int64(x)
+		case int8:
+			ints += int64(x)
+		case int16:
+			ints += int64(x)
+		case int32:
+			ints += int64(x)
+		case int64:
+			ints += x
+		case float32:
+			hadFloats = true
+			floats += float64(x)
+		case float64:
+			hadFloats = true
+			floats += x
+		case string:
+			if strings.Contains(x, ".") {
+				f, err := strconv.ParseFloat(x, 64)
+				if err == nil {
+					floats += f
+				} else {
+					panic(err)
+				}
+			} else {
+				i, err := strconv.ParseInt(x, 10, 64)
+				if err == nil {
+					ints += i
+				} else {
+					panic(err)
+				}
+			}
+		default:
+			panic(fmt.Errorf("cannot call sum() with item of type %T", x))
+		}
+	}
+	if hadFloats {
+		return floats + float64(ints)
+	}
+	return ints
+}
+
 func main() {
 	env := map[string]interface{}{
 		"foo":      1,
@@ -88,6 +141,7 @@ func main() {
 		"users":    getUsers(),
 		"getUsers": getUsers,
 		"getName":  getUserName,
+		"sum":      sumSlice,
 	}
 
 	out, _ := expr.Eval("double(foo)", env)
@@ -99,5 +153,9 @@ func main() {
 	out, _ = expr.Eval("getUsers()[0].Email", env)
 	fmt.Println(out)
 	out, _ = expr.Eval("getName(users[2])", env)
+	fmt.Println(out)
+	out, _ = expr.Eval("1 + 2 + 3.1 + 4", env)
+	fmt.Println(out)
+	out, _ = expr.Eval("sum([1, 2, 3.1, \"4\"])", env)
 	fmt.Println(out)
 }
